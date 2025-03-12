@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import type canvasTriangleType from '@/assets/types/triangle';
+import type ICanvasTriangle from '@/assets/types/canvas-triangle';
 import { onMounted, ref, type Ref } from 'vue';
+import { defineProps } from 'vue';
+defineProps({
+  
+})
 const canvas = ref()
 const ctx: Ref<CanvasRenderingContext2D|undefined> = ref()
-const triangle: Ref<canvasTriangleType> = ref({
+const triangle: Ref<ICanvasTriangle> = ref({
   angleA: 0,
   angleB: 0,
   angleC: 0,

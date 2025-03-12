@@ -1,37 +1,41 @@
 <script lang="ts" setup>
-import type formTriangleType from '@/assets/types/form-triangle';
-import { ref, type Ref } from 'vue';
-
-const triangle: Ref<formTriangleType> = ref({
-  angleA: 0,
-  angleB: 0,
-  angleC: 0,
-  isValid: true
+import { ref } from 'vue';
+const formTriangle = ref({
+  formAngleA:0,
+  formAngleB:0,
+  formSideA:0,
+})
+defineProps({
+  angleA: Number,
+  angleB: Number,
+  isValid: Boolean,
+  sideA: Number
 })
 const addTriangle = () => {
-  if (triangle.value.angleA == 0 || triangle.value.angleB == 0 || triangle.value.angleA < 0 || triangle.value.angleB < 0) {
-    triangle.value.isValid = false
-  } else if (180 - triangle.value.angleA - triangle.value.angleB > 0) {
-    triangle.value.angleC = 180 - triangle.value.angleA - triangle.value.angleB
-    triangle.value.isValid = true
-  } else {
-    triangle.value.isValid = false
-  }
+  // if (triangle.value.angleA == 0 || triangle.value.angleB == 0 || triangle.value.angleA < 0 || triangle.value.angleB < 0) {
+  //   triangle.value.isValid = false
+  // } else if (180 - triangle.value.angleA - triangle.value.angleB > 0) {
+  //   triangle.value.angleC = 180 - triangle.value.angleA - triangle.value.angleB
+  //   triangle.value.isValid = true
+  // } else {
+  //   triangle.value.isValid = false
+  // }
 }
 </script>
 <template>
+  {{ angleA }}
   <div :class="$style.input_card">
     <p :class="$style.px">Enter triangle:</p>
-    <form @submit.prevent="addTriangle">
-      <label for="angle1">Set angle B:</label>
-      <input type="number" id="angle1" name="angle1" v-model="triangle.angleA" />
-      <label for="angle2">Set angle A:</label>
-      <input type="number" id="angle2" name="angle2" v-model="triangle.angleB" />
+    <form @submit.prevent="$emit('submitTriangle', formTriangle)">
+      <label for="angleA">Set angle B:</label>
+      <input type="number" id="angleA" name="angleA" v-model="formTriangle.formAngleA"/>
+      <label for="angleB">Set angle A:</label>
+      <input type="number" id="angleB" name="angleB" v-model="formTriangle.formAngleB"/>
       <label for="sideA">Set side A:</label>
-      <input type="number" id="angle2" name="angle2" v-model="triangle.angleC" />
+      <input type="number" id="sideA" name="sideA" v-model="formTriangle.formSideA"/>
       <button type="submit">Submit</button>
     </form>
-    <p :class="$style.error" v-if="triangle.isValid === false">This does not make a valid triangle!</p>
+    <p :class="$style.error" v-if="isValid === false">This does not make a valid triangle!</p>
   </div>
 </template>
 <style module>

@@ -1,8 +1,5 @@
-export default interface canvasTriangleType {
-  angleA: number,
-  angleB: number,
-  angleC: number,
-  sideA: number,
-  sideB: number,
-  sideC: number,
+import type ICanvasTriangle from "./canvas-triangle";
+
+export default interface ITriangle extends ICanvasTriangle {
+  isValid: boolean
 }
