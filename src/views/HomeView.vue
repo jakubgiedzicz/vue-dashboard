@@ -1,7 +1,9 @@
 <script setup>
+import CanvasElement from '@/components/CanvasElement.vue';
+
 </script>
 <template>
-Welcome home
+<CanvasElement />
 </template>
 <style>
 </style>
