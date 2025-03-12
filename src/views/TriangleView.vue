@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type ICanvasTriangle from '@/assets/types/canvas-triangle';
 import type formTriangleType from '@/assets/types/form-triangle';
+import type ITriangle from '@/assets/types/triangle';
 import AngleForm from '@/components/AngleForm.vue';
 import CanvasElement from '@/components/CanvasElement.vue';
 import { ref, type Ref } from 'vue';
-const triangle: Ref<any> = ref({
+const triangle: Ref<ITriangle> = ref({
   angleA: 60,
   angleB: 30,
   angleC: 0,
@@ -16,20 +18,32 @@ const triangle: Ref<any> = ref({
   isValid: true
 })
 const checkTriangle = (formTriangle: formTriangleType) => {
-  if (formTriangle.isValid) {
+  if (formTriangle.formIsValid) {
     triangle.value.angleA = formTriangle.formAngleA
     triangle.value.angleB = formTriangle.formAngleB
     triangle.value.sideA = formTriangle.formSideA
   } else {
     triangle.value.isValid = false
   }
-
-  console.log(formTriangle)
+}
+const calcTriangle = (canvasTriangle: ICanvasTriangle)=> {
+  triangle.value.angleC = canvasTriangle.angleC
+  triangle.value.sideB = canvasTriangle.sideB
+  triangle.value.sideC = canvasTriangle.sideC
 }
 </script>
 <template>
-  <AngleForm :angleA="triangle.angleA" :angleB="triangle.angleB" :isValid="triangle.isValid" :sideA="triangle.sideA"
+  <div :class="$style.content_container">
+    <AngleForm :angleA="triangle.angleA" :angleB="triangle.angleB" :isValid="triangle.isValid" :sideA="triangle.sideA"
     @submitTriangle="checkTriangle" />
-  <CanvasElement />
+  <CanvasElement :angleA="triangle.angleA" :angleB="triangle.angleB" :sideA="triangle.sideA"
+  @calcTriangle="calcTriangle" />
+  </div>
 </template>
-<style module></style>
+<style module>
+.content_container {
+  display: flex;
+  flex-direction: row;
+  gap: 64px;
+}
+</style>

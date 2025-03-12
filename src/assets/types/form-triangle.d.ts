@@ -1,6 +1,6 @@
-export default interface formTriangleType {
+export default interface IFormTriangle {
   formAngleA: number;
   formAngleB: number;
   formSideA: number;
-  isValid: boolean;
+  formIsValid: boolean;
 }
