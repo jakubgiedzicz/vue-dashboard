@@ -1,54 +1,41 @@
 <script setup lang="ts">
 import type ICanvasTriangle from '@/assets/types/canvas-triangle';
+import getDegrees from '@/functions/getDegrees';
 import { onMounted, onUpdated, ref, type Ref } from 'vue';
 const emit = defineEmits(['calcTriangle', 'toggleScale'])
 const props = defineProps({
   angleA: {type: Number, required: true},
   angleB: {type: Number, required: true},
+  angleC: {type: Number, required: true},
   sideA: {type: Number, required: true},
+  sideB: {type: Number, required: true},
+  sideC: {type: Number, required: true},
   scale: {type: Boolean, required: true}
 })
 const canvas = ref()
 const ctx: Ref<CanvasRenderingContext2D|undefined> = ref()
-const triangle: Ref<ICanvasTriangle> = ref({
-  angleA: 0,
-  angleB: 0,
-  angleC: 0,
-  sideA: 0,
-  sideB: 0,
-  sideC: 0
+const size = ref({
+  width: 600,
+  height: 400
 })
-const getDegrees = (angle: number) => {
-  return angle*Math.PI/180
+const getScaleFactor = () => {
+
 }
 const drawTriangle = () => {
-  const h = Math.sin(getDegrees(props.angleB))*triangle.value.sideC
-  const x = Math.cos(getDegrees(props.angleB))*triangle.value.sideC 
+  const h = Math.sin(getDegrees(props.angleB))*props.sideC
+  const x = Math.cos(getDegrees(props.angleB))*props.sideC
   ctx.value?.clearRect(0, 0, 600, 400)
-  calcTriangle()
   ctx.value!.strokeStyle = "#ffffff"
   ctx.value?.beginPath()
-  ctx.value?.moveTo(250, 200)
-  ctx.value?.lineTo(250+triangle.value.sideA, 200)
-  ctx.value?.lineTo(250+x, 200+ h)
-  ctx.value?.lineTo(250, 200)
+  ctx.value?.moveTo(10, 10)
+  ctx.value?.lineTo(10+props.sideA, 10)
+  ctx.value?.lineTo(10-x+props.sideA, 10+ h)
+  ctx.value?.lineTo(10, 10)
   ctx.value?.stroke()
-}
-const calcTriangle = () => {
-  triangle.value.angleA = props.angleA
-  triangle.value.angleB = props.angleB
-  triangle.value.angleC = 180 - props.angleA - props.angleB
-  //between B and C
-  triangle.value.sideA = props.sideA
-  //between A and C
-  triangle.value.sideB = Math.sin(((Math.PI / 180) * props.angleB))/Math.sin(((Math.PI / 180) * props.angleA))*100
-  //between A and B
-  triangle.value.sideC = Math.sin(((Math.PI / 180) * (180 - props.angleA - props.angleB)))/Math.sin(((Math.PI / 180) * props.angleA))*100
 }
 onMounted(() => {
   canvas.value = document.getElementById("canvas")
   ctx.value = canvas.value.getContext("2d")
-  calcTriangle()
   drawTriangle()
 })
 onUpdated(()=> {
@@ -58,19 +45,19 @@ onUpdated(()=> {
 <template>
   <div class="stats">
     <h1>Current:</h1>
-    <p>Angle A: {{ triangle.angleA }}</p>
-    <p>Angle B: {{ triangle.angleB }}</p>
-    <p>Angle C: {{ triangle.angleC }}</p>
+    <p>Angle A: {{ props.angleA }}</p>
+    <p>Angle B: {{ props.angleB }}</p>
+    <p>Angle C: {{ props.angleC }}</p>
 <br />
-<p>Side a: {{ triangle.sideA }}</p>
-<p>Side b: {{ triangle.sideB.toFixed(2) }}</p>
-<p>Side c: {{ triangle.sideC.toFixed(2) }}</p>
+<p>Side a: {{ props.sideA }}</p>
+<p>Side b: {{ props.sideB.toFixed(2) }}</p>
+<p>Side c: {{ props.sideC.toFixed(2) }}</p>
 <br />
 <input type="checkbox" :checked="scale" name="scale" @change="$emit('toggleScale')"/>
 <label for="scale">Scale to canvas?</label>
   </div>
   <div class="canvas_container">
-    <canvas width="600" height="400" id="canvas"></canvas>
+    <canvas width="600" height="600" id="canvas"></canvas>
   </div>
 </template>
 <style scoped>
@@ -82,10 +69,7 @@ onUpdated(()=> {
 .stats {
   margin-inline: 16px;
   text-wrap: nowrap;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  height: fit-content;
 }
 p {
   margin: 2px 0;

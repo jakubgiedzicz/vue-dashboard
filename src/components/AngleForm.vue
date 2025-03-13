@@ -9,9 +9,9 @@ const props = defineProps({
   sideA: {type: Number, required: true},
 })
 const formTriangle:Ref<IFormTriangle> = ref({
-  formAngleA: 0,
-  formAngleB: 0,
-  formSideA: 0,
+  formAngleA: props.angleA,
+  formAngleB: props.angleB,
+  formSideA: props.sideA,
   formIsValid: true
 })
 const addTriangle = () => {
@@ -48,12 +48,10 @@ onMounted(()=> {
 <style module>
 .input_card {
   padding-inline: 16px;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding-bottom: 32px;
   box-shadow: 8px 8px 24px 0px rgb(12, 12, 12);
   width: 250px;
+  height: fit-content;
 }
 
 .input_card form {
