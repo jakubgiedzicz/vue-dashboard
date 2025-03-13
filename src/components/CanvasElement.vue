@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type ICanvasTriangle from '@/assets/types/canvas-triangle';
 import { onMounted, onUpdated, ref, type Ref } from 'vue';
-const emit = defineEmits(['calcTriangle'])
+const emit = defineEmits(['calcTriangle', 'toggleScale'])
 const props = defineProps({
   angleA: {type: Number, required: true},
   angleB: {type: Number, required: true},
-  sideA: {type: Number, required: true}
+  sideA: {type: Number, required: true},
+  scale: {type: Boolean, required: true}
 })
 const canvas = ref()
 const ctx: Ref<CanvasRenderingContext2D|undefined> = ref()
@@ -56,7 +57,7 @@ onUpdated(()=> {
 </script>
 <template>
   <div class="stats">
-    Current:
+    <h1>Current:</h1>
     <p>Angle A: {{ triangle.angleA }}</p>
     <p>Angle B: {{ triangle.angleB }}</p>
     <p>Angle C: {{ triangle.angleC }}</p>
@@ -64,20 +65,33 @@ onUpdated(()=> {
 <p>Side a: {{ triangle.sideA }}</p>
 <p>Side b: {{ triangle.sideB.toFixed(2) }}</p>
 <p>Side c: {{ triangle.sideC.toFixed(2) }}</p>
+<br />
+<input type="checkbox" :checked="scale" name="scale" @change="$emit('toggleScale')"/>
+<label for="scale">Scale to canvas?</label>
   </div>
   <div class="canvas_container">
     <canvas width="600" height="400" id="canvas"></canvas>
   </div>
 </template>
-<style>
+<style scoped>
 #canvas {
   fill: #ffffff;
   border: 2px solid green;
-  cursor: pointer;
   box-shadow: 8px 8px 24px 0px rgb(12, 12, 12);
 }
 .stats {
   margin-inline: 16px;
   text-wrap: nowrap;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+p {
+  margin: 2px 0;
+}
+input[type=checkbox]{
+  transform: scale(1.5);
+  cursor: pointer;
 }
 </style>

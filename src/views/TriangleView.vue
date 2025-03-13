@@ -5,6 +5,7 @@ import type ITriangle from '@/assets/types/triangle';
 import AngleForm from '@/components/AngleForm.vue';
 import CanvasElement from '@/components/CanvasElement.vue';
 import { ref, type Ref } from 'vue';
+const scale = ref(true)
 const triangle: Ref<ITriangle> = ref({
   angleA: 60,
   angleB: 30,
@@ -31,13 +32,16 @@ const calcTriangle = (canvasTriangle: ICanvasTriangle)=> {
   triangle.value.sideB = canvasTriangle.sideB
   triangle.value.sideC = canvasTriangle.sideC
 }
+const toggle = (toScale: boolean) => {
+  scale.value = !scale.value
+}
 </script>
 <template>
   <div :class="$style.content_container">
     <AngleForm :angleA="triangle.angleA" :angleB="triangle.angleB" :isValid="triangle.isValid" :sideA="triangle.sideA"
     @submitTriangle="checkTriangle" />
-  <CanvasElement :angleA="triangle.angleA" :angleB="triangle.angleB" :sideA="triangle.sideA"
-  @calcTriangle="calcTriangle" />
+  <CanvasElement :scale="scale" :angleA="triangle.angleA" :angleB="triangle.angleB" :sideA="triangle.sideA"
+  @calcTriangle="calcTriangle" @toggleScale="toggle"/>
   </div>
 </template>
 <style module>

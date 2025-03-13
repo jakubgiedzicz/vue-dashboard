@@ -6,7 +6,7 @@ const props = defineProps({
   angleA:{type: Number, required: true},
   angleB: {type: Number, required: true},
   isValid: Boolean,
-  sideA: {type: Number, required: true}
+  sideA: {type: Number, required: true},
 })
 const formTriangle:Ref<IFormTriangle> = ref({
   formAngleA: 0,
