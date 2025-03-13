@@ -3,16 +3,16 @@ import type IFormTriangle from '@/assets/types/form-triangle';
 import { onMounted, ref, type Ref } from 'vue';
 const emit = defineEmits(['submitTriangle'])
 const props = defineProps({
-  angleA: Number,
-  angleB: Number,
+  angleA:{type: Number, required: true},
+  angleB: {type: Number, required: true},
   isValid: Boolean,
-  sideA: Number
+  sideA: {type: Number, required: true}
 })
 const formTriangle:Ref<IFormTriangle> = ref({
-  formAngleA: props.angleA,
-  formAngleB: props.angleB,
-  formSideA: props.sideA,
-  formIsValid: props.isValid
+  formAngleA: 0,
+  formAngleB: 0,
+  formSideA: 0,
+  formIsValid: true
 })
 const addTriangle = () => {
   if (formTriangle.value.formAngleA == 0 || formTriangle.value.formAngleB == 0 || formTriangle.value.formAngleB < 0 || formTriangle.value.formAngleB < 0) {

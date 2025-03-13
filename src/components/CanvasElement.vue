@@ -3,9 +3,9 @@ import type ICanvasTriangle from '@/assets/types/canvas-triangle';
 import { onMounted, onUpdated, ref, type Ref } from 'vue';
 const emit = defineEmits(['calcTriangle'])
 const props = defineProps({
-  angleA: Number,
-  angleB: Number,
-  sideA: Number
+  angleA: {type: Number, required: true},
+  angleB: {type: Number, required: true},
+  sideA: {type: Number, required: true}
 })
 const canvas = ref()
 const ctx: Ref<CanvasRenderingContext2D|undefined> = ref()
@@ -23,7 +23,6 @@ const getDegrees = (angle: number) => {
 const drawTriangle = () => {
   const h = Math.sin(getDegrees(props.angleB))*triangle.value.sideC
   const x = Math.cos(getDegrees(props.angleB))*triangle.value.sideC 
-  console.log(Math.cos(Math.PI/180)*props.angleB)
   ctx.value?.clearRect(0, 0, 600, 400)
   calcTriangle()
   ctx.value!.strokeStyle = "#ffffff"
