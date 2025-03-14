@@ -27,20 +27,34 @@ const getScaleFactor = () => {
 const drawTriangle = () => {
   const h = Math.sin(getDegrees(props.angleB)) * props.sideC
   const x = Math.cos(getDegrees(props.angleB)) * props.sideC
+  let middleH = 0
+  if(props.sideA != 0 && props.sideB!=0){
+    middleH = +(props.sideA/(2*props.sideB)*100).toFixed(2)
+  }
+  const pointZero = {
+    x: (size.value.width / 2)-(props.sideA/2),
+    y: (size.value.height / 2)-(+(middleH/3).toFixed(2))
+  }
   ctx.value?.clearRect(0, 0, size.value.width, size.value.height)
   ctx.value!.strokeStyle = "#ffffff"
   if (!props.scale) {
     ctx.value?.beginPath()
-    ctx.value?.moveTo(size.value.width / 2, size.value.height / 2)
-    ctx.value?.lineTo(size.value.width / 2 + props.sideA, size.value.height / 2)
-    ctx.value?.lineTo(size.value.width / 2 - x + props.sideA, size.value.height / 2 + h)
-    ctx.value?.lineTo(size.value.width / 2, size.value.height / 2)
+    ctx.value?.moveTo(pointZero.x, pointZero.y)
+    ctx.value?.arc(pointZero.x, pointZero.y, props.circumscribedRadius, 0, 2*Math.PI)
+    ctx.value?.lineTo(pointZero.x+props.sideA, pointZero.y)
+    ctx.value?.lineTo(pointZero.x - x + props.sideA, pointZero.y + h)
+    ctx.value?.lineTo(pointZero.x, pointZero.y)
+    ctx.value?.moveTo(size.value.width/2, 0)
+    ctx.value?.lineTo(size.value.width/2, size.value.height)
+    ctx.value?.moveTo(0, size.value.height/2)
+    ctx.value?.lineTo(size.value.width, size.value.height/2)
     ctx.value?.stroke()
   } else {
     const scaleFactor = getScaleFactor()
     ctx.value?.beginPath()
     ctx.value?.moveTo(size.value.width / 2, size.value.height / 2)
     ctx.value?.lineTo(size.value.width / 2 + props.sideA, size.value.height / 2)
+    console.log(pointZero)
   }
 
 
