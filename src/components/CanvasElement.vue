@@ -9,7 +9,6 @@ const props = defineProps({
   sideA: { type: Number, required: true },
   sideB: { type: Number, required: true },
   sideC: { type: Number, required: true },
-  scale: { type: Boolean, required: true },
   inscribedRadius: { type: Number, required: true },
   circumscribedRadius: { type: Number, required: true }
 })
@@ -19,11 +18,6 @@ const size = ref({
   width: 600,
   height: 400
 })
-const getScaleFactor = () => {
-  if (size.value.height > size.value.width) {
-    return ((size.value.height / 2) - 20) / props.circumscribedRadius
-  } else return ((size.value.width / 2) - 20) / props.circumscribedRadius
-}
 const drawTriangle = () => {
   const h = Math.sin(getDegrees(props.angleB)) * props.sideC
   const x = Math.cos(getDegrees(props.angleB)) * props.sideC
@@ -33,33 +27,17 @@ const drawTriangle = () => {
   }
   const pointZero = {
     x: (size.value.width / 2)-(props.sideA/2),
-    y: (size.value.height / 2)-(+(middleH/3).toFixed(2))
+    y: (size.value.height / 2)-(+(middleH).toFixed(2))
   }
   ctx.value?.clearRect(0, 0, size.value.width, size.value.height)
   ctx.value!.strokeStyle = "#ffffff"
-  if (!props.scale) {
     ctx.value?.beginPath()
     ctx.value?.moveTo(pointZero.x, pointZero.y)
-    ctx.value?.arc(pointZero.x, pointZero.y, props.circumscribedRadius, 0, 2*Math.PI)
     ctx.value?.lineTo(pointZero.x+props.sideA, pointZero.y)
     ctx.value?.lineTo(pointZero.x - x + props.sideA, pointZero.y + h)
-    ctx.value?.lineTo(pointZero.x, pointZero.y)
-    ctx.value?.moveTo(size.value.width/2, 0)
-    ctx.value?.lineTo(size.value.width/2, size.value.height)
-    ctx.value?.moveTo(0, size.value.height/2)
-    ctx.value?.lineTo(size.value.width, size.value.height/2)
+    ctx.value?.lineTo(pointZero.x, pointZero.y)   
     ctx.value?.stroke()
-  } else {
-    const scaleFactor = getScaleFactor()
-    ctx.value?.beginPath()
-    ctx.value?.moveTo(size.value.width / 2, size.value.height / 2)
-    ctx.value?.lineTo(size.value.width / 2 + props.sideA, size.value.height / 2)
-    console.log(pointZero)
-  }
-
-
-
-}
+  } 
 onMounted(() => {
   canvas.value = document.getElementById("canvas")
   ctx.value = canvas.value.getContext("2d")
@@ -81,9 +59,6 @@ onUpdated(() => {
     <br />
     <p>r: {{ props.inscribedRadius }}</p>
     <p>R: {{ props.circumscribedRadius }}</p>
-    <br />
-    <input type="checkbox" :checked="props.scale" name="scale" @change="$emit('toggleScale')" />
-    <label for="scale">Scale to canvas?</label>
   </div>
   <div class="canvas_container">
     <canvas :width="size.width" :height="size.height" id="canvas"></canvas>

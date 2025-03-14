@@ -16,10 +16,10 @@ const triangle: Ref<ITriangle> = ref({
   //sideC = B<->C
   sideC: 0,
   isValid: true,
-  scale: false,
   circumscribedRadius: 0,
   inscribedRadius: 0
 })
+let scale = 1
 const calcTriangle = ()=> {
   triangle.value.angleC = 180 - triangle.value.angleA - triangle.value.angleB
   triangle.value.sideB = +(Math.sin(getDegrees(triangle.value.angleB))*triangle.value.sideA/Math.sin(getDegrees(triangle.value.angleA))).toFixed(2)
@@ -30,6 +30,11 @@ const calcTriangle = ()=> {
 }
 const formTriangle = (formTriangle: IFormTriangle) => {
   if (formTriangle.formIsValid) {
+    if(triangle.value.sideC<=100){
+    scale = 3
+  } else if(triangle.value.sideC>101 && triangle.value.sideC<=200){
+    scale = 2
+  }
     triangle.value.angleA = formTriangle.formAngleA
     triangle.value.angleB = formTriangle.formAngleB
     triangle.value.sideA = formTriangle.formSideA
@@ -38,16 +43,13 @@ const formTriangle = (formTriangle: IFormTriangle) => {
     triangle.value.isValid = false
   }
 }
-const toggle = () => {
-  triangle.value.scale = !triangle.value.scale
-}
 </script>
 <template>
   <div :class="$style.content_container">
     <AngleForm :angleA="triangle.angleA" :angleB="triangle.angleB" :isValid="triangle.isValid" :sideA="triangle.sideA"
     @submitTriangle="formTriangle" />
-  <CanvasElement :scale="triangle.scale" :angleA="triangle.angleA" :angleB="triangle.angleB" :angleC="triangle.angleC" :sideA="triangle.sideA" :sideB="triangle.sideB" :sideC="triangle.sideC" :inscribedRadius="triangle.inscribedRadius" :circumscribedRadius="triangle.circumscribedRadius"
-  @calcTriangle="calcTriangle" @toggleScale="toggle"/>
+  <CanvasElement :angleA="triangle.angleA" :angleB="triangle.angleB" :angleC="triangle.angleC" :sideA="triangle.sideA" :sideB="triangle.sideB" :sideC="triangle.sideC" :inscribedRadius="triangle.inscribedRadius" :circumscribedRadius="triangle.circumscribedRadius"
+  @calcTriangle="calcTriangle"/>
   </div>
 </template>
 <style module>
