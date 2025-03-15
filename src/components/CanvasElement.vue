@@ -19,25 +19,28 @@ const size = ref({
   height: 400
 })
 const drawTriangle = () => {
-  const h = Math.sin(getDegrees(props.angleB)) * props.sideC
-  const x = Math.cos(getDegrees(props.angleB)) * props.sideC
+  let scale = 1
+  if (props.sideC <= 150) scale = 3
+  else if (props.sideC <= 250) scale = 2
+  const h = Math.sin(getDegrees(props.angleB)) * props.sideC*scale
+  const x = Math.cos(getDegrees(props.angleB)) * props.sideC*scale
   let middleH = 0
-  if(props.sideA != 0 && props.sideB!=0){
-    middleH = +(props.sideA/(2*props.sideB)*100).toFixed(2)
+  if (props.sideA != 0 && props.sideB != 0) {
+    middleH = +(props.sideA*scale / (2 * props.sideB *scale) * 100).toFixed(2)
   }
   const pointZero = {
-    x: (size.value.width / 2)-(props.sideA/2),
-    y: (size.value.height / 2)-(+(middleH).toFixed(2))
+    x: (size.value.width / 2) - (props.sideA*scale / 2),
+    y: (size.value.height / 2) - (+(middleH).toFixed(2))
   }
   ctx.value?.clearRect(0, 0, size.value.width, size.value.height)
   ctx.value!.strokeStyle = "#ffffff"
-    ctx.value?.beginPath()
-    ctx.value?.moveTo(pointZero.x, pointZero.y)
-    ctx.value?.lineTo(pointZero.x+props.sideA, pointZero.y)
-    ctx.value?.lineTo(pointZero.x - x + props.sideA, pointZero.y + h)
-    ctx.value?.lineTo(pointZero.x, pointZero.y)   
-    ctx.value?.stroke()
-  } 
+  ctx.value?.beginPath()
+  ctx.value?.moveTo(pointZero.x, pointZero.y)
+  ctx.value?.lineTo(pointZero.x + props.sideA*scale, pointZero.y)
+  ctx.value?.lineTo(pointZero.x - x + props.sideA*scale, pointZero.y + h)
+  ctx.value?.lineTo(pointZero.x, pointZero.y)
+  ctx.value?.stroke()
+}
 onMounted(() => {
   canvas.value = document.getElementById("canvas")
   ctx.value = canvas.value.getContext("2d")
